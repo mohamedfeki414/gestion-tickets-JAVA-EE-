@@ -6,7 +6,7 @@
     <title>Jersey JDBC App</title>
     <script>
         async function fetchUsers() {
-            const response = await fetch("http://localhost:8080/jersey-jdbc-app/api/users");
+            const response = await fetch("http://localhost:8802/gestion-tickets/api/users");
             const users = await response.json();
 
             const userList = document.getElementById("user-list");

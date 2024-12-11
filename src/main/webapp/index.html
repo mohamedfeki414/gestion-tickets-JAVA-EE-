@@ -17,7 +17,7 @@
                 userList.innerHTML = ''; // Clear the existing list
                 data.forEach(user => {
                     const li = document.createElement('li');
-                    li.textContent = `User: ${user.name}`;  // Remplacez "name" par le nom du champ approprié
+                    li.textContent = `User: ${user.username}`;  // Remplacez "name" par le nom du champ approprié
                     userList.appendChild(li);
                 });
             } catch (error) {

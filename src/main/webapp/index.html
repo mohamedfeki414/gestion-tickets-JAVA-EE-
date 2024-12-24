@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jersey JDBC App</title>
-    <!-- Lien vers Bootstrap pour un design réactif -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
@@ -26,38 +25,33 @@
         .table th, .table td {
             text-align: center;
         }
+        .alert {
+            display: none;
+        }
     </style>
     <script>
         async function fetchUsers() {
+            const alertBox = document.getElementById('error-alert');
+            alertBox.style.display = 'none';  // Réinitialiser l'alerte
+
             try {
                 const response = await fetch('http://localhost:8082/my-javaee-project/api/users');
-                const text = await response.text();
-                const data = JSON.parse(text);  // Parser le texte en JSON
-                console.log(data);  // Afficher les données dans la console
+                if (!response.ok) {
+                    throw new Error('Erreur réseau');
+                }
+                const data = await response.json();
 
-                // Vous pouvez maintenant afficher les utilisateurs dans un tableau HTML
                 const userTableBody = document.getElementById('user-table-body');
-                userTableBody.innerHTML = ''; // Clear the existing table
+                userTableBody.innerHTML = '';  // Clear existing table
 
                 data.forEach(user => {
                     const row = document.createElement('tr');
-
-                    const usernameCell = document.createElement('td');
-                    usernameCell.textContent = user.username;  // Remplacez "username" par le champ approprié
-                    row.appendChild(usernameCell);
-
-                    const emailCell = document.createElement('td');
-                    emailCell.textContent = user.email;  // Remplacez "email" par le champ approprié
-                    row.appendChild(emailCell);
-
-                    const statusCell = document.createElement('td');
-                    statusCell.textContent = user.status;  // Remplacez "status" par le champ approprié
-                    row.appendChild(statusCell);
-
+                    row.innerHTML = `<td>${user.username}</td><td>${user.email}</td><td>${user.status}</td>`;
                     userTableBody.appendChild(row);
                 });
             } catch (error) {
-                console.error('Erreur lors de la requête ou du parsing JSON:', error);  // Gérer les erreurs
+                console.error('Erreur lors de la récupération des utilisateurs:', error);
+                alertBox.style.display = 'block';  // Afficher l'alerte d'erreur
             }
         }
     </script>
@@ -68,6 +62,12 @@
         <div class="text-center">
             <button class="btn btn-custom" onclick="fetchUsers()">Fetch Users</button>
         </div>
+
+        <!-- Alerte d'erreur -->
+        <div id="error-alert" class="alert alert-danger mt-4" role="alert">
+            Erreur lors du chargement des utilisateurs. Veuillez réessayer.
+        </div>
+
         <div class="table-responsive mt-4">
             <table class="table table-bordered table-striped">
                 <thead class="table-dark">
@@ -84,7 +84,6 @@
         </div>
     </div>
 
-    <!-- Lien vers le script Bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

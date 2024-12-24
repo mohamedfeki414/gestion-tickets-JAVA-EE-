@@ -1,4 +1,4 @@
-package com.example.support.gestion_tickets;
+package com.example.support.gestion_tickets.config;
 
 import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.container.ContainerRequestFilter;

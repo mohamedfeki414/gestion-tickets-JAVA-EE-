@@ -1,4 +1,4 @@
-package com.example.support.gestion_tickets;
+package com.example.support.gestion_tickets.models;
 
 public class User {
     private int id;

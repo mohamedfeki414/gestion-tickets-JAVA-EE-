@@ -1,4 +1,4 @@
-package com.example.support.gestion_tickets;
+package com.example.support.gestion_tickets.config;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

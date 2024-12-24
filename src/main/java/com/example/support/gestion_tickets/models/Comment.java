@@ -1,4 +1,4 @@
-package com.example.support.gestion_tickets;
+package com.example.support.gestion_tickets.models;
 
 import java.util.Date;
 

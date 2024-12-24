@@ -1,4 +1,4 @@
-package com.example.support.gestion_tickets;
+package com.example.support.gestion_tickets.resources;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -9,6 +9,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.example.support.gestion_tickets.config.DatabaseConnection;
+import com.example.support.gestion_tickets.models.Ticket;
 
 @Path("/tickets")
 public class TicketResource {

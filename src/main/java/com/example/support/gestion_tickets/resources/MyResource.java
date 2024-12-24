@@ -1,4 +1,4 @@
-package com.example.support.gestion_tickets;
+package com.example.support.gestion_tickets.resources;
 
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;

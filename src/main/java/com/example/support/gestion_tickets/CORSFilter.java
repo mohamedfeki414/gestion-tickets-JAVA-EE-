@@ -1,7 +1,5 @@
 package com.example.support.gestion_tickets;
 
-import java.io.IOException;
-
 import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.container.ContainerRequestFilter;
 import jakarta.ws.rs.container.ContainerResponseContext;

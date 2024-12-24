@@ -7,12 +7,12 @@ import java.sql.SQLException;
 public class DatabaseConnection {
 
     public static Connection getConnection() {
-        String url = "jdbc:mysql://localhost:3306/projet_db?serverTimezone=UTC"; // Vérifiez l'URL
-        String username = "root"; // Utilisez votre utilisateur MySQL
-        String password = "123456"; // Utilisez votre mot de passe MySQL
+        String url = "jdbc:mysql://localhost:3306/projet_db?serverTimezone=UTC"; 
+        String username = "root";
+        String password = "123456"; 
 
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver"); // Charger le driver
+            Class.forName("com.mysql.cj.jdbc.Driver"); 
             Connection connection = DriverManager.getConnection(url, username, password);
             return connection;
         } catch (ClassNotFoundException | SQLException e) {

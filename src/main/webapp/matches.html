@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jersey JDBC App</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+     <link rel="stylesheet" href="header.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+        h1, h2 {
+            text-align: center;
+            margin-top: 20px;
+            color: #007bff;
+        }
+        .container {
+            margin-top: 40px;
+        }
+        .btn-custom {
+            background-color: #007bff;
+            color: white;
+        }
+        .table th, .table td {
+            text-align: center;
+        }
+        .alert {
+            display: none;
+        }
+    </style>
+    <script>
+        async function fetchTickets() {
+            const alertBox = document.getElementById('ticket-error-alert');
+            alertBox.style.display = 'none';
+
+            try {
+                const response = await fetch('http://localhost:8082/my-javaee-project/api/tickets');
+                if (!response.ok) {
+                    throw new Error('Erreur réseau');
+                }
+                const data = await response.json();
+
+                const ticketTableBody = document.getElementById('ticket-table-body');
+                ticketTableBody.innerHTML = '';
+
+                data.forEach(ticket => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${ticket.id}</td>
+                        <td>${ticket.title}</td>
+                        <td>${ticket.description}</td>
+                        <td>${ticket.status}</td>
+                        <td>${ticket.creationDate}</td>
+                        <td>${ticket.assignedTo}</td>
+                        <td><button class="buy-button"  ><a href="buy-ticket.html">Buy Tickets</a></button></td>
+                        <td>
+                            <button class="btn btn-warning btn-sm" onclick="showEditTicketModal(${ticket.id}, '${ticket.title}', '${ticket.description}', '${ticket.status}', '${ticket.creationDate}', ${ticket.assignedTo})">Edit</button>
+                            <button class="btn btn-danger btn-sm" onclick="deleteTicket(${ticket.id})">Delete</button>
+                        </td>
+                    `;
+                    ticketTableBody.appendChild(row);
+                });
+            } catch (error) {
+                console.error('Erreur lors de la récupération des tickets:', error);
+                alertBox.style.display = 'block';
+            }
+        }
+
+        async function addOrUpdateTicket() {
+            const id = document.getElementById('ticket-id').value;
+            const title = document.getElementById('ticket-title').value;
+            const description = document.getElementById('ticket-description').value;
+            const status = document.getElementById('ticket-status').value;
+            const assignedTo = document.getElementById('ticket-assigned-to').value;
+
+            const method = id ? 'PUT' : 'POST';
+            const url = id 
+                ? `http://localhost:8082/my-javaee-project/api/tickets/${id}`
+                : `http://localhost:8082/my-javaee-project/api/tickets`;
+
+            try {
+                const response = await fetch(url, {
+                    method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        title,
+                        description,
+                        status,
+                        creationDate: new Date().toISOString(),
+                        assignedTo
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Erreur réseau');
+                }
+
+                document.getElementById('ticket-modal').classList.remove('show');
+                document.getElementById('ticket-form').reset();
+                fetchTickets();
+            } catch (error) {
+                console.error('Erreur lors de l\'ajout/mise à jour du ticket:', error);
+            }
+        }
+
+        async function deleteTicket(id) {
+            if (!confirm('Êtes-vous sûr de vouloir supprimer ce ticket ?')) return;
+
+            try {
+                const response = await fetch(`http://localhost:8082/my-javaee-project/api/tickets/${id}`, {
+                    method: 'DELETE'
+                });
+
+                if (!response.ok) {
+                    throw new Error('Erreur réseau');
+                }
+
+                fetchTickets();
+            } catch (error) {
+                console.error('Erreur lors de la suppression du ticket:', error);
+            }
+        }
+
+        function showEditTicketModal(id, title, description, status, creationDate, assignedTo) {
+            document.getElementById('ticket-id').value = id;
+            document.getElementById('ticket-title').value = title;
+            document.getElementById('ticket-description').value = description;
+            document.getElementById('ticket-status').value = status;
+            document.getElementById('ticket-assigned-to').value = assignedTo;
+
+            const ticketModal = new bootstrap.Modal(document.getElementById('ticket-modal'));
+            ticketModal.show();
+        }
+    </script>
+</head>
+<body>
+ <div class="header">
+        <div class="header-logo">
+            <img src="img/logo.png" alt="La Liga Logo" />
+            <div class="header-title">La Liga</div>
+        </div>
+        <div class="header-nav">
+            <a href="index.html">Home</a>
+            <a href="matches.html">Matches</a>
+            
+            <a href="contact.html">Contact</a>
+            <a href="about.html">About</a>
+        </div>
+    </div>
+    <div class="container">
+        <h2>List of Tickets</h2>
+        <div class="text-center">
+            <button class="btn btn-custom" onclick="fetchTickets()">Fetch Tickets</button>
+            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#ticket-modal">Add Ticket</button>
+        </div>
+
+        <div id="ticket-error-alert" class="alert alert-danger mt-4" role="alert">
+            Erreur lors du chargement des tickets. Veuillez réessayer.
+        </div>
+
+        <div class="table-responsive mt-4">
+            <table class="table table-bordered table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                        <th>Creation Date</th>
+                        <th>Assigned To</th>
+                        <th>Reservation</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="ticket-table-body">
+                    <!-- Les tickets seront ajoutés ici dynamiquement -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal pour Ajouter/Modifier un Ticket -->
+    <div class="modal fade" id="ticket-modal" tabindex="-1" aria-labelledby="ticket-modal-label" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="ticket-form" onsubmit="event.preventDefault(); addOrUpdateTicket();">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="ticket-modal-label">Add/Edit Ticket</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" id="ticket-id">
+                        <div class="mb-3">
+                            <label for="ticket-title" class="form-label">Title</label>
+                            <input type="text" class="form-control" id="ticket-title" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="ticket-description" class="form-label">Description</label>
+                            <textarea class="form-control" id="ticket-description" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="ticket-status" class="form-label">Status</label>
+                            <input type="text" class="form-control" id="ticket-status" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="ticket-assigned-to" class="form-label">Assigned To</label>
+                            <input type="number" class="form-control" id="ticket-assigned-to" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

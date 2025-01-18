@@ -3,25 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>La Liga - Home</title>
+    <title>Ticket Reservation - Home</title>
     <link rel="stylesheet" href="header.css">
     <style>
         body {
             margin: 0;
             font-family: 'Roboto', sans-serif;
-            background-color: #f4f4f9;
+            background: linear-gradient(to bottom, #003366, #007bff);
+            color: #ffffff;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #001f3f;
+        }
+        .header-logo {
+            display: flex;
+            align-items: center;
+        }
+        .header-logo img {
+            height: 50px;
+            margin-right: 10px;
+        }
+        .header-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffffff;
+        }
+        .header-nav a {
+            color: #ffffff;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 18px;
+            transition: color 0.3s;
+        }
+        .header-nav a:hover {
+            color: #ffcc00;
         }
         .main-content {
-            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             text-align: center;
+            padding: 50px 20px;
         }
         .main-content h1 {
-            font-size: 36px;
-            color: #003366;
+            font-size: 48px;
+            margin-bottom: 20px;
         }
         .main-content p {
-            font-size: 18px;
-            color: #333;
+            font-size: 20px;
+            margin-bottom: 30px;
+            max-width: 600px;
+        }
+        .cta-button {
+            display: inline-block;
+            padding: 15px 30px;
+            font-size: 20px;
+            color: #003366;
+            background-color: #ffcc00;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        .cta-button:hover {
+            background-color: #ffdd33;
+            transform: scale(1.05);
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #001f3f;
+            color: #ffffff;
+        }
+        footer a {
+            color: #ffcc00;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -30,22 +95,30 @@
     <div class="header">
         <div class="header-logo">
             <img src="img/logo.png" alt="La Liga Logo" />
-            <div class="header-title">La Liga</div>
+            <div class="header-title">Ticket Reservation</div>
         </div>
         <div class="header-nav">
             <a href="index.html">Home</a>
             <a href="matches.html">Matches</a>
+            <a href="tickets.html">Tickets</a>
             <a href="contact.html">Contact</a>
-            <a href="about.html">About</a>
         </div>
     </div>
     <!-- Header End -->
 
     <!-- Main Content Start -->
     <div class="main-content">
-        <h1>Welcome to La Liga</h1>
-        <p>Discover the latest news, matches, and updates about La Liga.</p>
+        <h1>Welcome to Ticket Reservation</h1>
+        <p>Book your tickets now for the most exciting matches and enjoy the best seats in the stadium. Don't miss out on the action!</p>
+        <a href="tickets.html" class="cta-button">Reserve Your Tickets</a>
     </div>
     <!-- Main Content End -->
+
+    <!-- Footer Start -->
+    <footer>
+        &copy; 2025 Ticket Reservation | <a href="privacy.html">Privacy Policy</a>
+    </footer>
+    <!-- Footer End -->
 </body>
 </html>
+

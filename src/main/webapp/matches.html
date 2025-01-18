@@ -30,110 +30,114 @@
             display: none;
         }
     </style>
-    <script>
-        async function fetchTickets() {
-            const alertBox = document.getElementById('ticket-error-alert');
-            alertBox.style.display = 'none';
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        fetchTickets(); // Appeler la fonction lors du chargement de la page
+    });
 
-            try {
-                const response = await fetch('http://localhost:8082/my-javaee-project/api/tickets');
-                if (!response.ok) {
-                    throw new Error('Erreur réseau');
-                }
-                const data = await response.json();
+    async function fetchTickets() {
+        const alertBox = document.getElementById('ticket-error-alert');
+        alertBox.style.display = 'none';
 
-                const ticketTableBody = document.getElementById('ticket-table-body');
-                ticketTableBody.innerHTML = '';
-
-                data.forEach(ticket => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${ticket.id}</td>
-                        <td>${ticket.title}</td>
-                        <td>${ticket.description}</td>
-                        <td>${ticket.status}</td>
-                        <td>${ticket.creationDate}</td>
-                        <td>${ticket.assignedTo}</td>
-                        <td><button class="buy-button"  ><a href="buy-ticket.html">Buy Tickets</a></button></td>
-                        <td>
-                            <button class="btn btn-warning btn-sm" onclick="showEditTicketModal(${ticket.id}, '${ticket.title}', '${ticket.description}', '${ticket.status}', '${ticket.creationDate}', ${ticket.assignedTo})">Edit</button>
-                            <button class="btn btn-danger btn-sm" onclick="deleteTicket(${ticket.id})">Delete</button>
-                        </td>
-                    `;
-                    ticketTableBody.appendChild(row);
-                });
-            } catch (error) {
-                console.error('Erreur lors de la récupération des tickets:', error);
-                alertBox.style.display = 'block';
+        try {
+            const response = await fetch('http://localhost:8082/my-javaee-project/api/tickets');
+            if (!response.ok) {
+                throw new Error('Erreur réseau');
             }
+            const data = await response.json();
+
+            const ticketTableBody = document.getElementById('ticket-table-body');
+            ticketTableBody.innerHTML = '';
+
+            data.forEach(ticket => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${ticket.id}</td>
+                    <td>${ticket.title}</td>
+                    <td>${ticket.description}</td>
+                    <td>${ticket.status}</td>
+                    <td>${ticket.creationDate}</td>
+                    <td>${ticket.assignedTo}</td>
+                    <td><button class="buy-button"><a href="buy-ticket.html">Buy Tickets</a></button></td>
+                    <td>
+                        <button class="btn btn-warning btn-sm" onclick="showEditTicketModal(${ticket.id}, '${ticket.title}', '${ticket.description}', '${ticket.status}', '${ticket.creationDate}', ${ticket.assignedTo})">Edit</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteTicket(${ticket.id})">Delete</button>
+                    </td>
+                `;
+                ticketTableBody.appendChild(row);
+            });
+        } catch (error) {
+            console.error('Erreur lors de la récupération des tickets:', error);
+            alertBox.style.display = 'block';
         }
+    }
 
-        async function addOrUpdateTicket() {
-            const id = document.getElementById('ticket-id').value;
-            const title = document.getElementById('ticket-title').value;
-            const description = document.getElementById('ticket-description').value;
-            const status = document.getElementById('ticket-status').value;
-            const assignedTo = document.getElementById('ticket-assigned-to').value;
+    async function addOrUpdateTicket() {
+        const id = document.getElementById('ticket-id').value;
+        const title = document.getElementById('ticket-title').value;
+        const description = document.getElementById('ticket-description').value;
+        const status = document.getElementById('ticket-status').value;
+        const assignedTo = document.getElementById('ticket-assigned-to').value;
 
-            const method = id ? 'PUT' : 'POST';
-            const url = id 
-                ? `http://localhost:8082/my-javaee-project/api/tickets/${id}`
-                : `http://localhost:8082/my-javaee-project/api/tickets`;
+        const method = id ? 'PUT' : 'POST';
+        const url = id 
+            ? `http://localhost:8082/my-javaee-project/api/tickets/${id}`
+            : `http://localhost:8082/my-javaee-project/api/tickets`;
 
-            try {
-                const response = await fetch(url, {
-                    method,
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        title,
-                        description,
-                        status,
-                        creationDate: new Date().toISOString(),
-                        assignedTo
-                    })
-                });
+        try {
+            const response = await fetch(url, {
+                method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    title,
+                    description,
+                    status,
+                    creationDate: new Date().toISOString(),
+                    assignedTo
+                })
+            });
 
-                if (!response.ok) {
-                    throw new Error('Erreur réseau');
-                }
-
-                document.getElementById('ticket-modal').classList.remove('show');
-                document.getElementById('ticket-form').reset();
-                fetchTickets();
-            } catch (error) {
-                console.error('Erreur lors de l\'ajout/mise à jour du ticket:', error);
+            if (!response.ok) {
+                throw new Error('Erreur réseau');
             }
+
+            document.getElementById('ticket-modal').classList.remove('show');
+            document.getElementById('ticket-form').reset();
+            fetchTickets();
+        } catch (error) {
+            console.error('Erreur lors de l\'ajout/mise à jour du ticket:', error);
         }
+    }
 
-        async function deleteTicket(id) {
-            if (!confirm('Êtes-vous sûr de vouloir supprimer ce ticket ?')) return;
+    async function deleteTicket(id) {
+        if (!confirm('Êtes-vous sûr de vouloir supprimer ce ticket ?')) return;
 
-            try {
-                const response = await fetch(`http://localhost:8082/my-javaee-project/api/tickets/${id}`, {
-                    method: 'DELETE'
-                });
+        try {
+            const response = await fetch(`http://localhost:8082/my-javaee-project/api/tickets/${id}`, {
+                method: 'DELETE'
+            });
 
-                if (!response.ok) {
-                    throw new Error('Erreur réseau');
-                }
-
-                fetchTickets();
-            } catch (error) {
-                console.error('Erreur lors de la suppression du ticket:', error);
+            if (!response.ok) {
+                throw new Error('Erreur réseau');
             }
-        }
 
-        function showEditTicketModal(id, title, description, status, creationDate, assignedTo) {
-            document.getElementById('ticket-id').value = id;
-            document.getElementById('ticket-title').value = title;
-            document.getElementById('ticket-description').value = description;
-            document.getElementById('ticket-status').value = status;
-            document.getElementById('ticket-assigned-to').value = assignedTo;
-
-            const ticketModal = new bootstrap.Modal(document.getElementById('ticket-modal'));
-            ticketModal.show();
+            fetchTickets();
+        } catch (error) {
+            console.error('Erreur lors de la suppression du ticket:', error);
         }
-    </script>
+    }
+
+    function showEditTicketModal(id, title, description, status, creationDate, assignedTo) {
+        document.getElementById('ticket-id').value = id;
+        document.getElementById('ticket-title').value = title;
+        document.getElementById('ticket-description').value = description;
+        document.getElementById('ticket-status').value = status;
+        document.getElementById('ticket-assigned-to').value = assignedTo;
+
+        const ticketModal = new bootstrap.Modal(document.getElementById('ticket-modal'));
+        ticketModal.show();
+    }
+</script>
 </head>
 <body>
  <div class="header">
@@ -152,7 +156,7 @@
     <div class="container">
         <h2>List of Tickets</h2>
         <div class="text-center">
-            <button class="btn btn-custom" onclick="fetchTickets()">Fetch Tickets</button>
+           
             <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#ticket-modal">Add Ticket</button>
         </div>
 

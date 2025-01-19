@@ -25,5 +25,9 @@
         <param-name>jersey.config.server.application</param-name>
         <param-value>com.example.support.gestion_tickets.Application</param-value>
     </context-param>
+    <!-- Default Welcome File to redirect to login.html -->
+     <welcome-file-list>
+        <welcome-file>login.html</welcome-file>
+    </welcome-file-list>
 
 </web-app>

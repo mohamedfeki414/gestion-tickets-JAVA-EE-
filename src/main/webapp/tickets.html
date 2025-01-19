@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste des Tickets et Panier</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+
+        #tickets-container, #shopping-cart {
+            margin-bottom: 30px;
+        }
+
+        #ticket-cards {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .ticket-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #fff;
+            padding: 20px;
+            width: 300px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .ticket-card h3 {
+            color: #333;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .ticket-card p {
+            color: #555;
+            font-size: 1rem;
+            margin: 5px 0;
+        }
+
+        .ticket-card .btn {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .ticket-card .btn:hover {
+            background-color: #0056b3;
+        }
+
+        .cart-items {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .cart-items li {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+            font-size: 1rem;
+            color: #555;
+        }
+
+        .cart-total {
+            text-align: right;
+            margin: 10px 0;
+            font-size: 1.2rem;
+            color: #333;
+        }
+
+        .checkout-btn {
+            display: block;
+            width: 100%;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .checkout-btn:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div id="tickets-container">
+        <h2>Liste des Tickets</h2>
+        <div id="ticket-cards">
+            <!-- Les cartes des tickets seront générées ici dynamiquement -->
+        </div>
+    </div>
+
+    <div id="shopping-cart">
+        <h2>Votre Panier</h2>
+        <ul class="cart-items">
+            <!-- Les articles ajoutés au panier apparaîtront ici -->
+        </ul>
+        <div class="cart-total">
+            <strong>Total: 0 €</strong>
+        </div>
+        <button class="btn checkout-btn">Commander</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const ticketsContainer = document.getElementById('ticket-cards');
+            const cartItems = document.querySelector('.cart-items');
+            const cartTotal = document.querySelector('.cart-total strong');
+            let totalAmount = 0;
+
+            // Charger les tickets depuis l'API
+            fetch('http://localhost:8082/my-javaee-project/api/tickets')
+                .then(response => response.json())
+                .then(tickets => {
+                    tickets.forEach(ticket => {
+                        // Créer une carte pour chaque ticket
+                        const ticketCard = document.createElement('div');
+                        ticketCard.classList.add('ticket-card');
+                        ticketCard.innerHTML = `
+                            <h3>${ticket.title}</h3>
+                            <p>Date: ${ticket.date}</p>
+                            <p>Lieu: ${ticket.location}</p>
+                            <p>Prix: ${ticket.price} €</p>
+                            <button class="btn add-to-cart">Ajouter au Panier</button>
+                        `;
+
+                        // Ajouter un événement pour le bouton "Ajouter au Panier"
+                        ticketCard.querySelector('.add-to-cart').addEventListener('click', () => {
+                            addToCart(ticket);
+                        });
+
+                        ticketsContainer.appendChild(ticketCard);
+                    });
+                })
+                .catch(error => {
+                    console.error('Erreur lors du chargement des tickets :', error);
+                });
+
+            // Ajouter un ticket au panier
+            function addToCart(ticket) {
+                const cartItem = document.createElement('li');
+                cartItem.innerHTML = `
+                    <span>${ticket.title}</span>
+                    <span>${ticket.price} €</span>
+                `;
+                cartItems.appendChild(cartItem);
+
+                // Mettre à jour le total
+                totalAmount += ticket.price;
+                cartTotal.textContent = `Total: ${totalAmount} €`;
+            }
+        });
+    </script>
+</body>
+</html>

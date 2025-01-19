@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Football Ticket Reservation</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background: url('https://via.placeholder.com/1200x800?text=Default+Football+Background') no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
+            transition: background 1s ease-in-out;
+        }
+
+        /* Container for the login form */
+        .login-container {
+            width: 400px;
+            padding: 40px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            margin: 150px auto;
+        }
+
+        /* Header style */
+        .login-container h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 28px;
+            color: #f8f9fa;
+        }
+
+        /* Label styling */
+        .login-container label {
+            display: block;
+            margin: 10px 0;
+            font-size: 16px;
+            color: #ccc;
+        }
+
+        /* Input styling */
+        .login-container input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: 1px solid #444;
+            background: #333;
+            color: #fff;
+            font-size: 16px;
+        }
+
+        /* Button styling */
+        .login-container button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            background: #28a745;
+            color: #fff;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        /* Button hover effect */
+        .login-container button:hover {
+            background: #218838;
+        }
+
+        /* Error message styling */
+        .login-container .error {
+            color: #f44336;
+            text-align: center;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <h2>Login to Reserve Football Tickets</h2>
+        <div id="error-message" class="error"></div>
+        <form id="login-form">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" placeholder="Enter your email" required>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+
+    <script>
+    // Function to change the background dynamically based on the time of day
+    function changeBackground() {
+        const today = new Date();
+        const hours = today.getHours();
+
+       
+            document.body.style.backgroundImage = "url('https://karlobag.eu/images/upload/750px-t1alw.jpg')";
+       
+    }
+
+    // Change background when the page loads
+    window.onload = changeBackground;
+
+        // Form submission logic
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            const loginRequest = { email, password };
+
+            try {
+                const response = await fetch('http://localhost:8082/my-javaee-project/api/users/auth', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(loginRequest)
+                });
+
+                if (response.ok) {
+                    const user = await response.json();
+                    alert(`Welcome, ${user.username}!`);
+                    // Redirect to index.html after successful login
+                    window.location.href = "index.html";
+                } else {
+                    const errorText = await response.text();
+                    document.getElementById('error-message').textContent = errorText;
+                }
+            } catch (error) {
+                document.getElementById('error-message').textContent = 'Error connecting to server.';
+            }
+        });
+    </script>
+</body>
+</html>

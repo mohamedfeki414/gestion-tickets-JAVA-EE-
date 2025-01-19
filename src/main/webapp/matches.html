@@ -35,7 +35,7 @@
                         <td>${match.stadium}</td>
                         <td>${match.location}</td>
                         <td>
-                            <button class="btn btn-info btn-sm" onclick="viewTickets(${match.id})">View Tickets</button>
+                            <button class="btn btn-info btn-sm" onclick="viewTickets(${match.id})">By Tickets</button>
                         </td>
                         <td>
                             <button class="btn btn-warning btn-sm" onclick="showEditMatchModal(${match.id}, '${match.title}', '${match.matchDate}', '${match.stadium}', '${match.location}')">Edit</button>
@@ -116,7 +116,7 @@
         }
 
         function viewTickets(matchId) {
-            window.location.href = `tickets.html?matchId=${matchId}`;
+            window.location.href = `tickets_by_id.html?matchId=${matchId}`;
         }
     </script>
 </head>

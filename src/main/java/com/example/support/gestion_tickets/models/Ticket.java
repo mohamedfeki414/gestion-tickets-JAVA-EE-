@@ -1,19 +1,19 @@
 package com.example.support.gestion_tickets.models;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 public class Ticket {
     private int id;
     private String title;
     private String description;
     private String status;
-    private LocalDateTime creationDate;
+    private OffsetDateTime creationDate;
     private int assignedTo;
 
     public Ticket() {
     }
 
-    public Ticket(int id, String title, String description, String status, LocalDateTime creationDate, int assignedTo) {
+    public Ticket(int id, String title, String description, String status, OffsetDateTime creationDate, int assignedTo) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -55,11 +55,11 @@ public class Ticket {
         this.status = status;
     }
 
-    public LocalDateTime getCreationDate() {
+    public OffsetDateTime getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(LocalDateTime creationDate) {
+    public void setCreationDate(OffsetDateTime creationDate) {
         this.creationDate = creationDate;
     }
 

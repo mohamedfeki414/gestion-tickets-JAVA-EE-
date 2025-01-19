@@ -20,10 +20,10 @@ public class TicketResource {
     @Produces(MediaType.APPLICATION_JSON)
     public List<Ticket> getTickets() {
         List<Ticket> tickets = new ArrayList<>();
-        try (Connection conn = DatabaseConnection.getConnection()) {
-            String query = "SELECT id, title, description, status, creation_date, assigned_to FROM tickets";
-            PreparedStatement stmt = conn.prepareStatement(query);
-            ResultSet rs = stmt.executeQuery();
+        String query = "SELECT id, title, description, status, creation_date, assigned_to FROM tickets";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
                 Ticket ticket = new Ticket(
@@ -31,7 +31,7 @@ public class TicketResource {
                         rs.getString("title"),
                         rs.getString("description"),
                         rs.getString("status"),
-                        rs.getTimestamp("creation_date").toLocalDateTime(),
+                        rs.getTimestamp("creation_date").toInstant().atOffset(java.time.ZoneOffset.UTC),
                         rs.getInt("assigned_to")
                 );
                 tickets.add(ticket);
@@ -46,13 +46,14 @@ public class TicketResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
     public String createTicket(Ticket ticket) {
-        try (Connection conn = DatabaseConnection.getConnection()) {
-            String query = "INSERT INTO tickets (title, description, status, creation_date, assigned_to) VALUES (?, ?, ?, ?, ?)";
-            PreparedStatement stmt = conn.prepareStatement(query);
+        String query = "INSERT INTO tickets (title, description, status, creation_date, assigned_to) VALUES (?, ?, ?, ?, ?)";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
             stmt.setString(1, ticket.getTitle());
             stmt.setString(2, ticket.getDescription());
             stmt.setString(3, ticket.getStatus());
-            stmt.setTimestamp(4, java.sql.Timestamp.valueOf(ticket.getCreationDate()));
+            stmt.setTimestamp(4, java.sql.Timestamp.from(ticket.getCreationDate().toInstant()));
             stmt.setInt(5, ticket.getAssignedTo());
             stmt.executeUpdate();
             return "Ticket créé avec succès !";
@@ -67,16 +68,21 @@ public class TicketResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
     public String updateTicket(@PathParam("id") int id, Ticket ticket) {
-        try (Connection conn = DatabaseConnection.getConnection()) {
-            String query = "UPDATE tickets SET title = ?, description = ?, status = ?, assigned_to = ? WHERE id = ?";
-            PreparedStatement stmt = conn.prepareStatement(query);
+        String query = "UPDATE tickets SET title = ?, description = ?, status = ?, assigned_to = ? WHERE id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
             stmt.setString(1, ticket.getTitle());
             stmt.setString(2, ticket.getDescription());
             stmt.setString(3, ticket.getStatus());
             stmt.setInt(4, ticket.getAssignedTo());
             stmt.setInt(5, id);
-            stmt.executeUpdate();
-            return "Ticket mis à jour avec succès !";
+            int rowsUpdated = stmt.executeUpdate();
+            if (rowsUpdated > 0) {
+                return "Ticket mis à jour avec succès !";
+            } else {
+                return "Aucun ticket trouvé avec cet ID.";
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             return "Erreur lors de la mise à jour du ticket.";
@@ -87,12 +93,17 @@ public class TicketResource {
     @Path("/{id}")
     @Produces(MediaType.TEXT_PLAIN)
     public String deleteTicket(@PathParam("id") int id) {
-        try (Connection conn = DatabaseConnection.getConnection()) {
-            String query = "DELETE FROM tickets WHERE id = ?";
-            PreparedStatement stmt = conn.prepareStatement(query);
+        String query = "DELETE FROM tickets WHERE id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
             stmt.setInt(1, id);
-            stmt.executeUpdate();
-            return "Ticket supprimé avec succès !";
+            int rowsDeleted = stmt.executeUpdate();
+            if (rowsDeleted > 0) {
+                return "Ticket supprimé avec succès !";
+            } else {
+                return "Aucun ticket trouvé avec cet ID.";
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             return "Erreur lors de la suppression du ticket.";

@@ -4,12 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Liste des Tickets et Panier</title>
+    <link rel="stylesheet" href="style.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
-            background-color: #f8f9fa;
-        }
+        
 
         #tickets-container, #shopping-cart {
             margin-bottom: 30px;
@@ -100,6 +97,20 @@
     </style>
 </head>
 <body>
+ <!-- Header Start -->
+    <div class="header">
+        <div class="header-logo">
+            <img src="img/logo.avif" alt="La Liga Logo" />
+            <div class="header-title">Ticket Reservation</div>
+        </div>
+        <div class="header-nav">
+            <a href="index.html">Home</a>
+            <a href="matches.html">Matches</a>
+            <a href="tickets.html">Tickets</a>
+            <a href="contact.html">Contact</a>
+        </div>
+    </div>
+    <!-- Header End -->
     <div id="tickets-container">
         <h2>Liste des Tickets</h2>
         <div id="ticket-cards">
@@ -168,5 +179,10 @@
             }
         });
     </script>
+    <!-- Footer Start -->
+    <footer>
+        &copy; 2025 Ticket Reservation | <a href="privacy.html">Privacy Policy</a>
+    </footer>
+    <!-- Footer End -->
 </body>
 </html>

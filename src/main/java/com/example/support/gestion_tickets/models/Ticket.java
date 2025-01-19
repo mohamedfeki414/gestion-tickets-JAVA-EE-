@@ -1,25 +1,21 @@
 package com.example.support.gestion_tickets.models;
 
-import java.time.OffsetDateTime;
-
 public class Ticket {
     private int id;
-    private String title;
-    private String description;
-    private String status;
-    private OffsetDateTime creationDate;
-    private int assignedTo;
+    private int matchId;
+    private double price;
+    private String zone; // gradin, chaise, derriere les buts, etc.
+    private String availability; // disponible, non disponible
 
     public Ticket() {
     }
 
-    public Ticket(int id, String title, String description, String status, OffsetDateTime creationDate, int assignedTo) {
+    public Ticket(int id, int matchId, double price, String zone, String availability) {
         this.id = id;
-        this.title = title;
-        this.description = description;
-        this.status = status;
-        this.creationDate = creationDate;
-        this.assignedTo = assignedTo;
+        this.matchId = matchId;
+        this.price = price;
+        this.zone = zone;
+        this.availability = availability;
     }
 
     // Getters et setters
@@ -31,55 +27,47 @@ public class Ticket {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
+    public int getMatchId() {
+        return matchId;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setMatchId(int matchId) {
+        this.matchId = matchId;
     }
 
-    public String getDescription() {
-        return description;
+    public double getPrice() {
+        return price;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setPrice(double price) {
+        this.price = price;
     }
 
-    public String getStatus() {
-        return status;
+    public String getZone() {
+        return zone;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setZone(String zone) {
+        this.zone = zone;
     }
 
-    public OffsetDateTime getCreationDate() {
-        return creationDate;
+    public String getAvailability() {
+        return availability;
     }
 
-    public void setCreationDate(OffsetDateTime creationDate) {
-        this.creationDate = creationDate;
-    }
-
-    public int getAssignedTo() {
-        return assignedTo;
-    }
-
-    public void setAssignedTo(int assignedTo) {
-        this.assignedTo = assignedTo;
+    public void setAvailability(String availability) {
+        this.availability = availability;
     }
 
     @Override
     public String toString() {
         return "Ticket{" +
                 "id=" + id +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", status='" + status + '\'' +
-                ", creationDate=" + creationDate +
-                ", assignedTo=" + assignedTo +
+                ", matchId=" + matchId +
+                ", price=" + price +
+                ", zone='" + zone + '\'' +
+                ", availability='" + availability + '\'' +
                 '}';
     }
 }
+

@@ -6,20 +6,18 @@
     <title>Liste des Tickets et Panier</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        
-
-        #tickets-container, #shopping-cart {
+        #tickets-container, #matches-container, #shopping-cart {
             margin-bottom: 30px;
         }
 
-        #ticket-cards {
+        #ticket-cards, #match-cards {
             display: flex;
             flex-wrap: wrap;
             gap: 20px;
             justify-content: center;
         }
 
-        .ticket-card {
+        .card {
             border: 1px solid #ddd;
             border-radius: 8px;
             background-color: #fff;
@@ -29,19 +27,19 @@
             text-align: center;
         }
 
-        .ticket-card h3 {
+        .card h3 {
             color: #333;
             font-size: 1.2rem;
             margin-bottom: 10px;
         }
 
-        .ticket-card p {
+        .card p {
             color: #555;
             font-size: 1rem;
             margin: 5px 0;
         }
 
-        .ticket-card .btn {
+        .card .btn {
             background-color: #007bff;
             color: #fff;
             border: none;
@@ -52,7 +50,7 @@
             transition: background-color 0.3s ease;
         }
 
-        .ticket-card .btn:hover {
+        .card .btn:hover {
             background-color: #0056b3;
         }
 
@@ -111,6 +109,14 @@
         </div>
     </div>
     <!-- Header End -->
+
+    <div id="matches-container">
+        <h2>Liste des Matches</h2>
+        <div id="match-cards">
+            <!-- Les cartes des matches seront générées ici dynamiquement -->
+        </div>
+    </div>
+
     <div id="tickets-container">
         <h2>Liste des Tickets</h2>
         <div id="ticket-cards">
@@ -132,9 +138,30 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const ticketsContainer = document.getElementById('ticket-cards');
+            const matchesContainer = document.getElementById('match-cards');
             const cartItems = document.querySelector('.cart-items');
             const cartTotal = document.querySelector('.cart-total strong');
             let totalAmount = 0;
+
+            // Charger les matches depuis l'API
+            fetch('http://localhost:8082/my-javaee-project/api/matches')
+                .then(response => response.json())
+                .then(matches => {
+                    matches.forEach(match => {
+                        // Créer une carte pour chaque match
+                        const matchCard = document.createElement('div');
+                        matchCard.classList.add('card');
+                        matchCard.innerHTML = `
+                            <h3>${match.title}</h3>
+                            <p>Date: ${match.matchDate}</p>
+                            <p>Stade: ${match.stadium}</p>
+                        `;
+                        matchesContainer.appendChild(matchCard);
+                    });
+                })
+                .catch(error => {
+                    console.error('Erreur lors du chargement des matches :', error);
+                });
 
             // Charger les tickets depuis l'API
             fetch('http://localhost:8082/my-javaee-project/api/tickets')
@@ -143,7 +170,7 @@
                     tickets.forEach(ticket => {
                         // Créer une carte pour chaque ticket
                         const ticketCard = document.createElement('div');
-                        ticketCard.classList.add('ticket-card');
+                        ticketCard.classList.add('card');
                         ticketCard.innerHTML = `
                             <h3>${ticket.title}</h3>
                             <p>Date: ${ticket.date}</p>

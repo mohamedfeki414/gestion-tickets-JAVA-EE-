@@ -5,31 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jersey JDBC App</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
-     <link rel="stylesheet" href="header.css">
-    <style>
-        body {
-            background-color: #f8f9fa;
-            font-family: Arial, sans-serif;
-        }
-        h1, h2 {
-            text-align: center;
-            margin-top: 20px;
-            color: #007bff;
-        }
-        .container {
-            margin-top: 40px;
-        }
-        .btn-custom {
-            background-color: #007bff;
-            color: white;
-        }
-        .table th, .table td {
-            text-align: center;
-        }
-        .alert {
-            display: none;
-        }
-    </style>
+     <link rel="stylesheet" href="style.css">
+
   <script>
     document.addEventListener('DOMContentLoaded', () => {
         fetchTickets(); // Appeler la fonction lors du chargement de la page
@@ -140,19 +117,20 @@
 </script>
 </head>
 <body>
- <div class="header">
+  <!-- Header Start -->
+    <div class="header">
         <div class="header-logo">
-            <img src="img/logo.png" alt="La Liga Logo" />
-            <div class="header-title">La Liga</div>
+            <img src="img/logo.avif" alt="La Liga Logo" />
+            <div class="header-title">Ticket Reservation</div>
         </div>
         <div class="header-nav">
             <a href="index.html">Home</a>
             <a href="matches.html">Matches</a>
-            
+            <a href="tickets.html">Tickets</a>
             <a href="contact.html">Contact</a>
-            <a href="about.html">About</a>
         </div>
     </div>
+    <!-- Header End -->
     <div class="container">
         <h2>List of Tickets</h2>
         <div class="text-center">
@@ -223,5 +201,10 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+     <!-- Footer Start -->
+    <footer>
+        &copy; 2025 Ticket Reservation | <a href="privacy.html">Privacy Policy</a>
+    </footer>
+    <!-- Footer End -->
 </body>
 </html>

@@ -1,0 +1,135 @@
+/* General Reset */
+body {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: linear-gradient(to bottom, #003366, #007bff);
+    color: #ffffff;
+    background-color: #f8f9fa;
+    font-family: Arial, sans-serif;
+}
+
+/* Typography */
+h1, h2 {
+    text-align: center;
+    margin-top: 20px;
+    color: #007bff;
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #001f3f;
+}
+
+.header-logo {
+    display: flex;
+    align-items: center;
+}
+
+.header-logo img {
+    height: 50px;
+    margin-right: 10px;
+}
+
+.header-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+.header-nav a {
+    color: #ffffff;
+    text-decoration: none;
+    margin: 0 15px;
+    font-size: 18px;
+    transition: color 0.3s;
+}
+
+.header-nav a:hover {
+    color: #ffcc00;
+}
+
+/* Main Content */
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 50px 20px;
+}
+
+.main-content h1 {
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+
+.main-content p {
+    font-size: 20px;
+    margin-bottom: 30px;
+    max-width: 600px;
+}
+
+.cta-button {
+    display: inline-block;
+    padding: 15px 30px;
+    font-size: 20px;
+    color: #003366;
+    background-color: #ffcc00;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.cta-button:hover {
+    background-color: #ffdd33;
+    transform: scale(1.05);
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #001f3f;
+    color: #ffffff;
+    margin-top: auto;
+}
+
+footer a {
+    color: #ffcc00;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+/* Container */
+.container {
+    margin-top: 40px;
+}
+
+/* Buttons */
+.btn-custom {
+    background-color: #007bff;
+    color: white;
+}
+
+/* Table */
+.table th, .table td {
+    text-align: center;
+}
+
+/* Alert */
+.alert {
+    display: none;
+}

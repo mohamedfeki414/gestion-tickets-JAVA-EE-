@@ -20,7 +20,7 @@ public class TicketResource {
     @Produces(MediaType.APPLICATION_JSON)
     public List<Ticket> getTickets() {
         List<Ticket> tickets = new ArrayList<>();
-        String query = "SELECT id, title, description, status, creation_date, assigned_to FROM tickets";
+        String query = "SELECT id, match_id, price, zone, availability FROM tickets";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
@@ -28,11 +28,10 @@ public class TicketResource {
             while (rs.next()) {
                 Ticket ticket = new Ticket(
                         rs.getInt("id"),
-                        rs.getString("title"),
-                        rs.getString("description"),
-                        rs.getString("status"),
-                        rs.getTimestamp("creation_date").toInstant().atOffset(java.time.ZoneOffset.UTC),
-                        rs.getInt("assigned_to")
+                        rs.getInt("match_id"),
+                        rs.getDouble("price"),
+                        rs.getString("zone"),
+                        rs.getString("availability")
                 );
                 tickets.add(ticket);
             }
@@ -46,15 +45,14 @@ public class TicketResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
     public String createTicket(Ticket ticket) {
-        String query = "INSERT INTO tickets (title, description, status, creation_date, assigned_to) VALUES (?, ?, ?, ?, ?)";
+        String query = "INSERT INTO tickets (match_id, price, zone, availability) VALUES (?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
-            stmt.setString(1, ticket.getTitle());
-            stmt.setString(2, ticket.getDescription());
-            stmt.setString(3, ticket.getStatus());
-            stmt.setTimestamp(4, java.sql.Timestamp.from(ticket.getCreationDate().toInstant()));
-            stmt.setInt(5, ticket.getAssignedTo());
+            stmt.setInt(1, ticket.getMatchId());
+            stmt.setDouble(2, ticket.getPrice());
+            stmt.setString(3, ticket.getZone());
+            stmt.setString(4, ticket.getAvailability());
             stmt.executeUpdate();
             return "Ticket créé avec succès !";
         } catch (SQLException e) {
@@ -68,14 +66,14 @@ public class TicketResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
     public String updateTicket(@PathParam("id") int id, Ticket ticket) {
-        String query = "UPDATE tickets SET title = ?, description = ?, status = ?, assigned_to = ? WHERE id = ?";
+        String query = "UPDATE tickets SET match_id = ?, price = ?, zone = ?, availability = ? WHERE id = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
-            stmt.setString(1, ticket.getTitle());
-            stmt.setString(2, ticket.getDescription());
-            stmt.setString(3, ticket.getStatus());
-            stmt.setInt(4, ticket.getAssignedTo());
+            stmt.setInt(1, ticket.getMatchId());
+            stmt.setDouble(2, ticket.getPrice());
+            stmt.setString(3, ticket.getZone());
+            stmt.setString(4, ticket.getAvailability());
             stmt.setInt(5, id);
             int rowsUpdated = stmt.executeUpdate();
             if (rowsUpdated > 0) {
@@ -108,5 +106,33 @@ public class TicketResource {
             e.printStackTrace();
             return "Erreur lors de la suppression du ticket.";
         }
+    }
+
+    @GET
+    @Path("/match/{matchId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Ticket> getTicketsByMatch(@PathParam("matchId") int matchId) {
+        List<Ticket> tickets = new ArrayList<>();
+        String query = "SELECT id, match_id, price, zone, availability FROM tickets WHERE match_id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setInt(1, matchId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Ticket ticket = new Ticket(
+                            rs.getInt("id"),
+                            rs.getInt("match_id"),
+                            rs.getDouble("price"),
+                            rs.getString("zone"),
+                            rs.getString("availability")
+                    );
+                    tickets.add(ticket);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return tickets;
     }
 }

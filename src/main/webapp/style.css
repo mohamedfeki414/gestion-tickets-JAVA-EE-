@@ -133,3 +133,21 @@ footer a:hover {
 .alert {
     display: none;
 }
+/* Assurez-vous que le fond de la modal et la couleur du texte sont appropriés */
+.modal-content {
+    background-color: #fff; /* Fond clair pour la modal */
+    color: #333; /* Texte sombre pour la lisibilité */
+}
+
+.modal-body input,
+.modal-body textarea {
+    background-color: #f8f9fa; /* Fond clair pour les champs de texte */
+    color: #333; /* Texte sombre dans les champs */
+    padding: 10px;
+}
+
+/* Définir la taille et la lisibilité de l'écriture */
+.modal-body label {
+    color: #333;
+    font-weight: bold;
+}
